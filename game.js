@@ -1,15 +1,15 @@
 import { cons, car, cdr, toString as pairToString } from '@hexlet/pairs';
 import { cons as consList, l, random, head, reverse, toString as listToString } from '@hexlet/pairs-data';
 
-const run = (p1, p2, cards) => {
+const run = (p1, p2, cards, customRandom) => {
   const iter = (h1, name1, h2, name2, order, log) => {
     if (h1 <= 0) {
       return consList(cons(car(head(log)), `${name1} был убит`), log);
     }
 
-    const card = random(cards);
+    const card = customRandom(cards);
     const cardName = car(card);
-    const damage = cdr(card)();
+    const damage = cdr(card)(h2);
     const newHealth = h2 - damage;
 
     const message = `Игрок ${name1} применил '${cardName}'
@@ -29,4 +29,6 @@ const run = (p1, p2, cards) => {
   return reverse(iter(startHealth, p1, startHealth, p2, 1, l(logItem)));
 };
 
-export default cards => (name1, name2) => run(name1, name2, cards);
+export default (cards, customRandom = random) =>  (
+ (name1, name2) =>  run(name1, name2, cards, customRandom)
+);
